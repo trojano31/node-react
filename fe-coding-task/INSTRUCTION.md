@@ -25,21 +25,18 @@ npm run dev
 The main goal is to implement a small application that presents a line/bar chart with Norway statistics on the average
 price per square meter fetched from https://data.ssb.no.
 
-A user has to be able to provide parameters like quarters range and house type. These parameters have to be reflected in
-the URL, so users can share the URL with others.
+## Requirements
 
-Moreover, these parameters should be persisted between browser sessions so users don't have to select them for every
-visit.
-
-UI should somehow limit users from providing quarter values earlier than 2009K1.
-
-
-We would like you also to add the possibility to save statistics for further use with the possibility to add and edit single comment for the presented statistics. The comment may be stored in Local Storage, so it can be later used when viewing the statistics. 
+- A user has to be able to provide parameters like quarters range and house type in a simple form. These parameters have to be reflected in
+  the URL so that users can share the URL with others.
+- UI should limit users from providing quarter values earlier than 2009K1.
+- We want you to create a search history `on demand` in local storage. It means that after every search, you will ask the user if they want to save the search entry in the history.
 
 ### For example
 
 - quarters range: 2016K1-2021K4
 - house type: Småhus
+- You can choose your own Chart libraries. React Charts and MUI X Charts are just examples.
 
 | Type of property | API value |
 |:-----------------|:---------:|
@@ -102,4 +99,4 @@ We would like you to use some additional libraries for this task (included in pa
 - react-hook-form
 
 ## Type-script
-Please don't forget about typings!
+Please don't forget about typing!
