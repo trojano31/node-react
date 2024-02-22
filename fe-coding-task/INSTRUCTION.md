@@ -1,3 +1,25 @@
+# Commands for app
+
+### Install dependencies
+```
+npm install
+```
+
+### Build app
+```
+npm run build
+```
+
+### Runt linter
+```
+npm run lint
+```
+
+### Start app
+```
+npm run dev
+```
+
 # Recruitment task - coding
 
 The main goal is implementing a small application that presents a line/bar chart with Norway statistics on the average
