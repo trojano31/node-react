@@ -1,7 +1,7 @@
 # Recruitment task - coding
 
-The main goal is to implement a small application that presents a line/bar chart with Norway statistics on the average
-price per square meter fetched from https://data.ssb.no.
+The main goal is implementing a small application that presents a line/bar chart with Norway statistics on the average
+price per square meter fetched from https://data.ssb.no. Documentation is Norwegian - use your favourite translator if you need any.
 
 
 ## Requirements
