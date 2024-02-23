@@ -1,14 +1,14 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import React, { useMemo, useState } from 'react';
-import './App.css';
+import { useMemo, useState } from 'react';
+import './main/main.css';
 import { useForm } from 'react-hook-form';
-import { ControlledSelect } from './components/Select';
-import { IHousingQueryParams } from './types/housingQuery';
+import { ControlledSelect } from './../components/Select';
+import { IHousingQueryParams } from '../types/housingQuery';
 import { Button, Container } from '@mui/material';
-import { useHousingQuery } from './hooks/useHousingQuery';
+import { useHousingQuery } from './../hooks/useHousingQuery';
 
-function App() {
+function ViewMain() {
   const housingTypes = useMemo(getHousingTypes, []);
   const quarters = useMemo(getQuarters, []);
   const defaultValues = { Boligtype: housingTypes[0].value, Tid: quarters[0].value }
@@ -119,4 +119,4 @@ function App() {
   }
 }
 
-export default App;
+export default ViewMain;
