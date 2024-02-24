@@ -66,7 +66,7 @@ export const useHousingQuery = (params: IHousingQueryParams) => {
 async function makeRequest({ params }: { params: any }) { // type to be made
   const response = await axios.post(API_URL, params);
   if (response.status === 200) {
-    return { data: { values: response.data.value }, error: '' };
+    return { data: response.data.value, error: '' };
   }
   return { data: [], error: 'Something went wrong' };
 }
