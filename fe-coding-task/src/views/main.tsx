@@ -3,37 +3,42 @@ import { css } from '@emotion/react';
 import { useMemo, useState } from 'react';
 import './main/main.css';
 import { useForm } from 'react-hook-form';
-import { ControlledSelect } from './../components/Select';
-import { IHousingQueryParams } from '../types/housingQuery';
-import { Button, Container } from '@mui/material';
+import { IHousingQueryFormParams, IHousingQueryParams } from '../types/housingQuery';
+import { Box, Container } from '@mui/material';
 import { useHousingQuery } from './../hooks/useHousingQuery';
+import ViewMainForm from './main/form.tsx';
+import ViewMainCharts from './main/charts.tsx';
 
 function ViewMain() {
   const housingTypes = useMemo(getHousingTypes, []);
   const quarters = useMemo(getQuarters, []);
-  const defaultValues = { Boligtype: housingTypes[0].value, Tid: quarters[0].value }
-  const [currentParams, setCurrentParams] = useState(defaultValues)
+  const defaultValues: IHousingQueryFormParams = { Boligtype: housingTypes[0].value, TidFrom: quarters[0].value, TidTo: quarters[1].value };
+  const [currentParams, setCurrentParams] = useState(prepareParams(defaultValues));
   const {
     handleSubmit,
     formState: { errors },
-    control
-  } = useForm<IHousingQueryParams>({ defaultValues });
-  const {isLoading, data, error} = useHousingQuery(currentParams);
+    control,
+    watch
+  } = useForm<IHousingQueryFormParams>({ defaultValues });
+  const { isLoading, data, error } = useHousingQuery(currentParams);
+  const tidFromValue = watch('TidFrom');
+  const tidToValue = watch('TidTo');
   return (
     <div css={css`
       margin-top: 3rem
     `}>
       <Container maxWidth="md">
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div css={css`
-            display: flex;
-            gap: 1rem;
-          `}>
-            <ControlledSelect name="Boligtype" label="Housing Type" options={housingTypes} control={control} />
-            <ControlledSelect name="Tid" label="Quarter" options={quarters} control={control} />
-            <Button type="submit">Get data</Button>
-          </div>
-        </form>
+        <Box sx={{ alignItems: 'center', display: 'flex', flexDirection: 'column' }}>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div css={css`
+              display: flex;
+              gap: 1rem;
+            `}>
+              <ViewMainForm tidToValue={tidToValue} tidFromValue={tidFromValue} quarters={quarters} control={control} housingTypes={housingTypes} />
+            </div>
+          </form>
+          <ViewMainCharts data={data} currentParams={currentParams} isLoading={isLoading} error={error} />
+        </Box>
       </Container>
     </div>
   );
@@ -114,8 +119,17 @@ function ViewMain() {
       '2023K4'].map(i => ({ text: i, value: i }));
   }
 
-  function onSubmit(data: IHousingQueryParams) {
-    setCurrentParams(data)
+  function onSubmit(data: IHousingQueryFormParams) {
+    setCurrentParams(prepareParams(data));
+  }
+
+  function prepareParams(data: IHousingQueryFormParams): IHousingQueryParams {
+    const indexFrom = quarters.findIndex(i => i.value === data.TidFrom);
+    const indexTo = quarters.findIndex(i => i.value === data.TidTo);
+    return {
+      ...data,
+      Tid: quarters.slice(indexFrom, indexTo).map(quarter => quarter.value)
+    };
   }
 }
 

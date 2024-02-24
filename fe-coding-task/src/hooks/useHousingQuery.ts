@@ -10,7 +10,7 @@ export const useHousingQuery = (params: IHousingQueryParams) => {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    if(params) fetchQueries()
+    if (params) fetchQueries();
   }, [JSON.stringify(params)]);
 
   return {
@@ -21,35 +21,36 @@ export const useHousingQuery = (params: IHousingQueryParams) => {
     setIsLoading(true);
     setError('');
     setData([]);
+
     const { data, error } = await makeRequest({
       params: {
         query: [
           {
-            "code": "Boligtype",
-            "selection": {
-              "filter": "item",
-              "values": [params.Boligtype]
+            'code': 'Boligtype',
+            'selection': {
+              'filter': 'item',
+              'values': [params.Boligtype]
             }
           },
           {
-            "code": "ContentsCode",
-            "selection": {
-              "filter": "item",
-              "values": [
-                "KvPris"
+            'code': 'ContentsCode',
+            'selection': {
+              'filter': 'item',
+              'values': [
+                'KvPris'
               ]
             }
           },
           {
-            "code": "Tid",
-            "selection": {
-              "filter": "item",
-              "values": [params.Tid]
+            'code': 'Tid',
+            'selection': {
+              'filter': 'item',
+              'values': params.Tid
             }
           }
         ],
         response: {
-          "format": "json-stat2"
+          'format': 'json-stat2'
         }
       }
     });
@@ -65,7 +66,7 @@ export const useHousingQuery = (params: IHousingQueryParams) => {
 async function makeRequest({ params }: { params: any }) { // type to be made
   const response = await axios.post(API_URL, params);
   if (response.status === 200) {
-    return { data: response.data.value, error: '' };
+    return { data: { values: response.data.value }, error: '' };
   }
   return { data: [], error: 'Something went wrong' };
 }
