@@ -1,11 +1,11 @@
 import { Alert, CircularProgress, Stack, Switch, Typography } from '@mui/material';
-import { IHousingQueryParams } from '../../types/housingQuery';
+import { IDataTypes, IHousingQueryParams } from '../../types/housingQuery';
 import { useState } from 'react';
 import { BarChart, LineChart } from '@mui/x-charts';
 
 interface IViewMainCharts {
   isLoading: boolean;
-  data?: number[];
+  data?: IDataTypes;
   error: string;
   currentParams: IHousingQueryParams;
 }
@@ -20,12 +20,11 @@ const ChartTypes: IChartTypes = {
   BAR: 'BAR'
 };
 
-const ViewMainCharts = ({ data, isLoading, currentParams, error }: IViewMainCharts) => {
+const ViewMainCharts = ({ data, isLoading, error }: IViewMainCharts) => {
   const [chartType, setChartType] = useState(ChartTypes.LINE);
   if (isLoading) {
     return <CircularProgress />;
   }
-  console.log(data);
   if (error) {
     return <Alert severity="error">{error}</Alert>;
   }
@@ -40,10 +39,10 @@ const ViewMainCharts = ({ data, isLoading, currentParams, error }: IViewMainChar
       </Stack>
       {chartType === ChartTypes.LINE && (
         <LineChart
-          xAxis={[{ data: currentParams.Tid, scaleType: 'point' }]}
+          xAxis={[{ data: data?.labels, scaleType: 'point' }]}
           series={[
             {
-              data,
+              data: data?.values,
             },
           ]}
           width={500}
@@ -52,8 +51,8 @@ const ViewMainCharts = ({ data, isLoading, currentParams, error }: IViewMainChar
       )}
       {chartType === ChartTypes.BAR && (
         <BarChart
-          xAxis={[{ scaleType: 'band', data: currentParams.Tid }]}
-          series={[{ data }]}
+          xAxis={[{ scaleType: 'band', data: data?.labels }]}
+          series={[{ data: data?.values }]}
           width={500}
           height={300}
         />

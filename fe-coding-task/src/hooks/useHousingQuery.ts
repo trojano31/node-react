@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { IHousingQueryParams } from '../types/housingQuery';
+import { IDataTypes, IHousingQueryParams } from '../types/housingQuery';
 
 const API_URL = 'https://data.ssb.no/api/v0/no/table/07241';
 
 export const useHousingQuery = (params: IHousingQueryParams) => {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<IDataTypes>({ values: [], labels: [] });
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -20,9 +20,9 @@ export const useHousingQuery = (params: IHousingQueryParams) => {
   async function fetchQueries() {
     setIsLoading(true);
     setError('');
-    setData([]);
+    setData({ values: [], labels: [] });
 
-    const { data, error } = await makeRequest({
+    const { values, labels, error } = await makeRequest({
       params: {
         query: [
           {
@@ -57,7 +57,7 @@ export const useHousingQuery = (params: IHousingQueryParams) => {
     if (error) {
       setError(error);
     } else {
-      setData(data);
+      setData({ values, labels });
     }
     setIsLoading(false);
   }
@@ -66,7 +66,8 @@ export const useHousingQuery = (params: IHousingQueryParams) => {
 async function makeRequest({ params }: { params: any }) { // type to be made
   const response = await axios.post(API_URL, params);
   if (response.status === 200) {
-    return { data: response.data.value, error: '' };
+    const labels = Object.keys(response.data.dimension.Tid.category.label);
+    return { values: response.data.value, labels, error: '' };
   }
-  return { data: [], error: 'Something went wrong' };
+  return { values: [], error: 'Something went wrong' };
 }

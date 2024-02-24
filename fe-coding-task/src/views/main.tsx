@@ -7,11 +7,13 @@ import { useHousingQuery } from './../hooks/useHousingQuery';
 import ViewMainForm from './main/form.tsx';
 import ViewMainCharts from './main/charts.tsx';
 import { getHousingTypes, getQuarters } from '../helpers/getSelectData.ts';
+import { useSearchParams } from "react-router-dom";
 
 function ViewMain() {
   const housingTypes = useMemo(getHousingTypes, []);
   const quarters = useMemo(getQuarters, []);
-  const defaultValues: IHousingQueryFormParams = { Boligtype: housingTypes[0].value, TidFrom: quarters[0].value, TidTo: quarters[5].value };
+  const [searchParams, setSearchParams] = useSearchParams();
+  const defaultValues: IHousingQueryFormParams = getDefaultValues();
   const [currentParams, setCurrentParams] = useState(prepareParams(defaultValues));
   const {
     handleSubmit,
@@ -37,6 +39,25 @@ function ViewMain() {
 
   function onSubmit(data: IHousingQueryFormParams) {
     setCurrentParams(prepareParams(data));
+    saveDataToUrl(data)
+  }
+
+  function getDefaultValues() {
+    return {
+      Boligtype: searchParams.get('Boligtype') || housingTypes[0].value,
+      TidFrom: searchParams.get('TidFrom') || quarters[0].value,
+      TidTo: searchParams.get('TidTo') || quarters[5].value
+    }
+  }
+
+  function saveDataToUrl(data: IHousingQueryFormParams) {
+    const paramsObject: Record<string, string> = {
+      Boligtype: data.Boligtype,
+      TidFrom: data.TidFrom,
+      TidTo: data.TidTo,
+    };
+    const params = new URLSearchParams(paramsObject)
+    setSearchParams(params)
   }
 
   function prepareParams(data: IHousingQueryFormParams): IHousingQueryParams {
@@ -44,7 +65,7 @@ function ViewMain() {
     const indexTo = quarters.findIndex(i => i.value === data.TidTo);
     return {
       ...data,
-      Tid: quarters.slice(indexFrom, indexTo).map(quarter => quarter.value)
+      Tid: quarters.slice(indexFrom, indexTo + 1).map(quarter => quarter.value)
     };
   }
 }

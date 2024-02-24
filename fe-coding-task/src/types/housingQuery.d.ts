@@ -8,3 +8,8 @@ export interface IHousingQueryFormParams {
   TidFrom: string;
   TidTo: string;
 }
+
+export interface IDataTypes {
+  values?: number[]
+  labels?: string[]
+}
