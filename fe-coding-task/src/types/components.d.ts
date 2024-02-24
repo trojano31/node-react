@@ -1,4 +1,4 @@
-export interface SelectOption {
+export interface ISelectOption {
   text: string;
   value: string;
   disabled?: boolean

@@ -1,5 +1,5 @@
 import { Alert, CircularProgress, Stack, Switch, Typography } from '@mui/material';
-import { IDataTypes, IHousingQueryParams } from '../../types/housingQuery';
+import { IDataTypes } from '../../types/housingQuery';
 import { useState } from 'react';
 import { BarChart, LineChart } from '@mui/x-charts';
 
@@ -7,7 +7,6 @@ interface IViewMainCharts {
   isLoading: boolean;
   data?: IDataTypes;
   error: string;
-  currentParams: IHousingQueryParams;
 }
 
 interface IChartTypes {

@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { IDataTypes, IHousingQueryParams } from '../types/housingQuery';
+import { IDataTypes, IHousingQueryFormParams, IHousingQueryParams } from '../types/housingQuery';
+import { ISelectOption } from '../types/components';
 
 const API_URL = 'https://data.ssb.no/api/v0/no/table/07241';
 
-export const useHousingQuery = (params: IHousingQueryParams) => {
+export const useHousingQuery = (params: IHousingQueryFormParams, quarters: ISelectOption[]) => {
   const [data, setData] = useState<IDataTypes>({ values: [], labels: [] });
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
@@ -21,7 +22,7 @@ export const useHousingQuery = (params: IHousingQueryParams) => {
     setIsLoading(true);
     setError('');
     setData({ values: [], labels: [] });
-
+    const preparedParams = prepareParams();
     const { values, labels, error } = await makeRequest({
       params: {
         query: [
@@ -29,7 +30,7 @@ export const useHousingQuery = (params: IHousingQueryParams) => {
             'code': 'Boligtype',
             'selection': {
               'filter': 'item',
-              'values': [params.Boligtype]
+              'values': [preparedParams.Boligtype]
             }
           },
           {
@@ -45,7 +46,7 @@ export const useHousingQuery = (params: IHousingQueryParams) => {
             'code': 'Tid',
             'selection': {
               'filter': 'item',
-              'values': params.Tid
+              'values': preparedParams.Tid
             }
           }
         ],
@@ -60,6 +61,15 @@ export const useHousingQuery = (params: IHousingQueryParams) => {
       setData({ values, labels });
     }
     setIsLoading(false);
+  }
+
+  function prepareParams(): IHousingQueryParams {
+    const indexFrom = quarters.findIndex(i => i.value === params.TidFrom);
+    const indexTo = quarters.findIndex(i => i.value === params.TidTo);
+    return {
+      Boligtype: params.Boligtype,
+      Tid: quarters.slice(indexFrom, indexTo + 1).map(quarter => quarter.value)
+    };
   }
 };
 

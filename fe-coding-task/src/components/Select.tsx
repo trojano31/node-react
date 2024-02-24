@@ -1,10 +1,10 @@
 import { Control, Controller, FieldPath } from 'react-hook-form';
 import { Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 import { IHousingQueryFormParams } from '../types/housingQuery';
-import { SelectOption } from '../types/components';
+import { ISelectOption } from '../types/components';
 
 interface IControlledSelect {
-  options: SelectOption[];
+  options: ISelectOption[];
   control: Control<IHousingQueryFormParams>;
   name: FieldPath<IHousingQueryFormParams>;
   label: string

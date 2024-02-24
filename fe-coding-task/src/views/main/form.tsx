@@ -1,12 +1,12 @@
 import { ControlledSelect } from '../../components/Select.tsx';
 import { Button } from '@mui/material';
-import { SelectOption } from '../../types/components';
+import { ISelectOption } from '../../types/components';
 import { Control } from 'react-hook-form';
 import { IHousingQueryFormParams } from '../../types/housingQuery';
 
 interface IViewMainForm {
-  quarters: SelectOption[];
-  housingTypes: SelectOption[];
+  quarters: ISelectOption[];
+  housingTypes: ISelectOption[];
   control: Control<IHousingQueryFormParams>;
   tidToValue: string;
   tidFromValue: string;
