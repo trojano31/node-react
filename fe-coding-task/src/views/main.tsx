@@ -1,5 +1,4 @@
 import { useMemo, useState } from 'react';
-import './main/main.css';
 import { useForm } from 'react-hook-form';
 import { IHousingQueryFormParams } from '../types/housingQuery';
 import { Box, Container } from '@mui/material';
